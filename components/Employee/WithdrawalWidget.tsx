@@ -1,14 +1,54 @@
 'use client'
 
 import { useAccount } from 'wagmi'
+import { useEffect, useState } from 'react'
+import { ARC_USDC_ADDRESS } from '@/lib/config/chains'
+
+// Arc Testnet Chain ID
+const ARC_CHAIN_ID = 5042002
+
+// Dynamic import for LI.FI Widget
+let LiFiWidgetComponent: any = null
 
 export function WithdrawalWidget() {
   const { address, isConnected } = useAccount()
+  const [Widget, setWidget] = useState<any>(null)
 
-  // TODO: Integrate LI.FI Widget
-  // The LI.FI widget has dependency conflicts with Sui SDK
-  // For now, this is a placeholder that can be replaced with proper LI.FI integration
-  // See: https://docs.li.fi/integrate-li.fi-widget/getting-started
+  useEffect(() => {
+    // Dynamically import LI.FI widget to avoid SSR issues
+    if (typeof window !== 'undefined') {
+      import('@lifi/widget').then((module) => {
+        LiFiWidgetComponent = module.LiFiWidget
+        setWidget(() => LiFiWidgetComponent)
+      }).catch((error) => {
+        console.error('Error loading LI.FI widget:', error)
+      })
+    }
+  }, [])
+
+  // LI.FI Widget Configuration
+  const widgetConfig = {
+    fromChain: ARC_CHAIN_ID,
+    fromToken: ARC_USDC_ADDRESS,
+    toChain: undefined, // Allow user to select destination
+    toToken: undefined, // Allow user to select token
+    // Restrict from chain to only Arc Testnet
+    chains: {
+      allow: {
+        from: [ARC_CHAIN_ID], // Only allow bridging FROM Arc
+        to: undefined, // Allow any destination chain
+      },
+    },
+    // Theme configuration
+    appearance: 'auto' as const,
+    theme: {
+      container: {
+        borderRadius: '12px',
+      },
+    },
+    // API key (optional but recommended)
+    apiKey: process.env.NEXT_PUBLIC_LI_FI_API_KEY,
+  }
 
   if (!isConnected) {
     return (
@@ -27,43 +67,25 @@ export function WithdrawalWidget() {
           Swap & Bridge
         </h3>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-          Bridge your USDC from Arc to Base/Optimism or swap to ETH in a single transaction
+          Bridge your USDC from Arc Testnet (Chain {ARC_CHAIN_ID}) to any other chain or swap to other assets in a single transaction
         </p>
         
         {/* LI.FI Widget Container */}
-        <div className="min-h-[400px] bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-          {/* Placeholder for LI.FI Widget */}
-          <div className="flex flex-col items-center justify-center h-full text-center py-12">
-            <svg className="w-16 h-16 text-indigo-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-            </svg>
-            <p className="text-gray-600 dark:text-gray-400 mb-2">
-              LI.FI Widget
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-500">
-              Configure your swap and bridge route here
-            </p>
-            <p className="text-xs text-gray-400 dark:text-gray-600 mt-4">
-              From: USDC (Arc) → To: ETH (Base/Optimism)
-            </p>
-            <div className="mt-6 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
-              <p className="text-xs text-yellow-800 dark:text-yellow-200">
-                ⚠️ LI.FI widget integration pending - placeholder UI shown
-              </p>
+        <div className="min-h-[500px] bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          {Widget ? (
+            <Widget
+              config={widgetConfig}
+              integrator="nominal-payroll"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full min-h-[500px]">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+                <p className="text-gray-600 dark:text-gray-400">Loading LI.FI Widget...</p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
-
-        {/* Alternative: Simple button that would trigger LI.FI flow */}
-        <button
-          onClick={() => {
-            // In production, this would open the LI.FI widget modal or trigger the swap
-            alert('LI.FI widget integration: This would open the swap & bridge interface')
-          }}
-          className="w-full mt-4 px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors"
-        >
-          Open Swap & Bridge
-        </button>
       </div>
     </div>
   )

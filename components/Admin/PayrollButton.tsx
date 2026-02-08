@@ -22,38 +22,24 @@ export function PayrollButton() {
     setTxHash(null)
 
     try {
-      const employees = employeesData as Employee[]
-      
-      // Prepare batch transfer data
-      const recipients = employees.map(emp => emp.walletAddress)
-      const amounts = employees.map(emp => emp.salary)
+      const response = await fetch('/api/payroll/execute', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
 
-      // TODO: Replace with actual Circle Developer Wallet SDK call
-      // This is a placeholder that simulates the API call
-      const simulateCircleBatchTransfer = async () => {
-        // In production, this would be:
-        // const response = await circleWallet.batchTransfer({
-        //   recipients,
-        //   amounts,
-        //   token: 'USDC'
-        // })
-        
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 2000))
-        
-        // Simulate transaction hash
-        const mockTxHash = '0x' + Array.from({ length: 64 }, () => 
-          Math.floor(Math.random() * 16).toString(16)
-        ).join('')
-        
-        return mockTxHash
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to execute payroll')
       }
 
-      const hash = await simulateCircleBatchTransfer()
-      setTxHash(hash)
-    } catch (err) {
+      // Use transferId as the transaction identifier
+      setTxHash(data.transferId || 'Transfer initiated')
+    } catch (err: any) {
       console.error('Error executing payroll:', err)
-      setError('Failed to execute payroll. Please try again.')
+      setError(err.message || 'Failed to execute payroll. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -83,10 +69,13 @@ export function PayrollButton() {
       {txHash && (
         <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
           <p className="text-sm font-medium text-green-800 dark:text-green-200 mb-1">
-            ✅ Success! Payroll executed successfully
+            ✅ Success! Payroll batch transfer initiated
           </p>
           <p className="text-xs text-green-600 dark:text-green-400 font-mono break-all">
-            Transaction Hash: {txHash}
+            Transfer ID: {txHash}
+          </p>
+          <p className="text-xs text-green-600 dark:text-green-400 mt-2">
+            Check Circle dashboard for transaction status
           </p>
         </div>
       )}

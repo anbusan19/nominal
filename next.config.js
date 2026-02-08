@@ -26,17 +26,35 @@ const nextConfig = {
     
     // Ignore Mysten/Sui dependencies that cause issues with LI.FI widget
     // These are optional dependencies that aren't needed for EVM chains
+    // Use multiple patterns to catch all variations
     config.plugins.push(
       new webpack.IgnorePlugin({
-        checkResource(resource, context) {
-          // Ignore @mysten packages when imported from @lifi/widget
-          if (resource.includes('@mysten') && context.includes('@lifi/widget')) {
+        resourceRegExp: /@mysten/,
+      })
+    );
+    
+    // Also use checkResource for more specific control
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        checkResource(resource) {
+          // Ignore any @mysten package
+          if (resource && resource.includes('@mysten')) {
             return true;
           }
           return false;
         },
       })
     );
+    
+    // Add fallbacks for Sui-related modules to prevent build errors
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        '@mysten/sui': false,
+        '@mysten/dapp-kit': false,
+        '@mysten/sui/jsonRpc': false,
+      };
+    }
     
     return config;
   },

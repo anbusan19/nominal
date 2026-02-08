@@ -1,0 +1,15 @@
+[
+  {
+    "companyName": "Caspier",
+    "companyDescription": "asdfg",
+    "website": "https://caspier.vercel.app",
+    "contactEmail": "caspier@gmail.com",
+    "ensDomain": "caspier.eth",
+    "walletAddress": "0xF746C249955f7516A601E309764241590486b509",
+    "registeredAt": "2026-02-08T12:59:37.478Z",
+    "isOwner": false,
+    "ownerChain": "none",
+    "updatedAt": "2026-02-08T13:15:14.371Z",
+    "txHash": null
+  }
+]

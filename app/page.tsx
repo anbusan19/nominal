@@ -33,11 +33,18 @@ export default function LandingPage() {
                 Manage your treasury and execute global payroll with Circle and ENS
               </p>
             </div>
-            <Link href="/admin" className="block">
-              <Button className="w-full py-4 text-lg" variant="primary">
-                Manage Treasury
-              </Button>
-            </Link>
+            <div className="space-y-3">
+              <Link href="/employer/register" className="block">
+                <Button className="w-full py-4 text-lg" variant="primary">
+                  Register Company
+                </Button>
+              </Link>
+              <Link href="/admin" className="block">
+                <Button className="w-full py-3 text-base" variant="outline">
+                  Manage Treasury
+                </Button>
+              </Link>
+            </div>
           </div>
 
           {/* For Talent Card */}

@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
-import { useAccount } from 'wagmi'
+import { useState, useEffect } from 'react'
+import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from 'wagmi'
 import { Button } from '@/components/ui/Button'
+import { sepolia } from 'viem/chains'
+import { ENS_NAME_WRAPPER_ADDRESS } from '@/lib/config/constants'
 
 export function IdentityClaim() {
   const { address, isConnected } = useAccount()
@@ -10,6 +12,11 @@ export function IdentityClaim() {
   const [isMinting, setIsMinting] = useState(false)
   const [mintedSubname, setMintedSubname] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const { sendTransaction, data: hash, isPending: isSending } = useSendTransaction()
+  const { isLoading: isConfirming, isSuccess: txSuccess } = useWaitForTransactionReceipt({
+    hash,
+    chainId: sepolia.id,
+  })
 
   const handleMintIdentity = async () => {
     if (!username.trim()) {
@@ -26,34 +33,43 @@ export function IdentityClaim() {
     setError(null)
 
     try {
-      // TODO: Replace with actual API call to mint ENS subname
-      // This would call your backend API endpoint that uses ENS NameWrapper
-      const response = await fetch('/api/ens/mint-subname', {
+      // Call the identity registration API to prepare ENS subname transaction
+      const response = await fetch('/api/identity/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username,
-          address,
           parentDomain: 'nominal.eth',
+          label: username,
+          ownerAddress: address,
         }),
       })
 
       if (!response.ok) {
-        throw new Error('Failed to mint subname')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to prepare ENS registration')
       }
 
       const data = await response.json()
-      const subname = `${username}.nominal.eth`
-      setMintedSubname(subname)
-      setUsername('')
-    } catch (err) {
+      
+      if (!data.transaction) {
+        throw new Error('No transaction data returned')
+      }
+
+      // Execute the transaction using wagmi's sendTransaction
+      // The API returns the encoded transaction data, which we'll send directly
+      await sendTransaction({
+        to: data.transaction.to as `0x${string}`,
+        data: data.transaction.data as `0x${string}`,
+        chainId: data.transaction.chainId,
+      })
+      
+      // The transaction hash will be available in the hash variable from useSendTransaction
+      // Success will be handled by useWaitForTransactionReceipt
+    } catch (err: any) {
       console.error('Error minting identity:', err)
-      // For demo purposes, simulate success even if API doesn't exist
-      const subname = `${username}.nominal.eth`
-      setMintedSubname(subname)
-      setUsername('')
+      setError(err.message || 'Failed to mint subname. Please try again.')
     } finally {
       setIsMinting(false)
     }
@@ -69,17 +85,32 @@ export function IdentityClaim() {
     )
   }
 
-  if (mintedSubname) {
+  // Update minted subname when transaction succeeds
+  useEffect(() => {
+    if (txSuccess && username && !mintedSubname) {
+      setMintedSubname(`${username}.nominal.eth`)
+      setUsername('')
+    }
+  }, [txSuccess, username, mintedSubname])
+
+  if (mintedSubname || txSuccess) {
     return (
       <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
         <p className="text-sm font-medium text-green-800 dark:text-green-200 mb-2">
           ✅ Identity Claimed Successfully!
         </p>
         <p className="text-lg font-mono text-green-600 dark:text-green-400">
-          {mintedSubname}
+          {mintedSubname || `${username}.nominal.eth`}
         </p>
+        {hash && (
+          <p className="text-xs text-green-600 dark:text-green-400 mt-2 font-mono break-all">
+            TX: {hash}
+          </p>
+        )}
         <Button
-          onClick={() => setMintedSubname(null)}
+          onClick={() => {
+            setMintedSubname(null)
+          }}
           variant="outline"
           className="mt-4"
         >
@@ -120,17 +151,17 @@ export function IdentityClaim() {
 
       <Button
         onClick={handleMintIdentity}
-        disabled={!username || isMinting}
+        disabled={!username || isMinting || isSending || isConfirming}
         variant="primary"
         className="w-full"
       >
-        {isMinting ? (
+        {isMinting || isWriting || isConfirming ? (
           <span className="flex items-center justify-center gap-2">
             <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            Minting...
+            {isSending ? 'Sign Transaction...' : isConfirming ? 'Confirming...' : 'Preparing...'}
           </span>
         ) : (
           'Mint Identity'

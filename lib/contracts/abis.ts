@@ -24,3 +24,21 @@ export const ERC20_ABI = parseAbi([
   'function decimals() view returns (uint8)',
   'function symbol() view returns (string)',
 ]);
+
+// ENS ETH Registrar Controller ABI
+export const ENS_ETH_REGISTRAR_CONTROLLER_ABI = parseAbi([
+  'function commit(bytes32 commitment)',
+  'function register(string name, address owner, uint256 duration, bytes32 secret) payable',
+  'function rentPrice(string name, uint256 duration) view returns (uint256)',
+  'function makeCommitment(string name, address owner, uint256 duration, bytes32 secret, address resolver, bytes[] data, bool reverseRecord, uint16 ownerControlledFuses) pure returns (bytes32)',
+  'function commitments(bytes32 commitment) view returns (uint256)',
+]);
+
+// ENS NameWrapper ABI (extended)
+export const ENS_NAME_WRAPPER_ABI = parseAbi([
+  'function wrapETH2LD(string label, address wrappedOwner, uint16 fuses, uint64 expiry, address resolver) payable returns (uint64)',
+  'function setSubnodeRecord(bytes32 parentNode, string label, address owner, address resolver, uint64 ttl, uint32 fuses, uint64 expiry)',
+  'function setSubnodeOwner(bytes32 parentNode, string label, address owner) returns (bytes32)',
+  'function ownerOf(uint256 id) view returns (address)',
+  'function getData(uint256 id) view returns (address owner, address resolver, uint64 ttl, uint64 expiry, uint32 fuses)',
+]);
