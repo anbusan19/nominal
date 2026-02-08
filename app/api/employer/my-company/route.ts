@@ -15,14 +15,9 @@ export async function GET(request: NextRequest) {
     }
 
     // In production, this would query a database
-    // For now, we'll search through all companies
-    // This is inefficient but works for the in-memory storage
-    const companies = Array.from(
-      // We need to export a function to get all companies or search by owner
-      // For now, return null and let the client handle it
-    )
-
-    // Since we don't have a search function, we'll return null
+    // For now, we'll try to get the company using the getCompany function
+    // Note: getCompany expects an ENS name, not an owner address
+    // Since we don't have a search function by owner, we'll return null
     // The client should store the company ENS name after registration
     return NextResponse.json({
       success: true,

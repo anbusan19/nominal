@@ -15,10 +15,10 @@ export function Button({
   return (
     <button
       className={clsx(
-        'px-4 py-2 rounded-lg font-medium transition-colors',
+        'px-4 py-2 rounded-lg font-medium transition-all',
         {
-          'bg-primary-600 text-white hover:bg-primary-700': variant === 'primary',
-          'border-2 border-primary-600 text-primary-600 hover:bg-primary-50': variant === 'outline',
+          'bg-brand-orange text-white hover:bg-red-600 shadow-[0_0_20px_rgba(232,65,66,0.3)] hover:shadow-[0_0_30px_rgba(232,65,66,0.5)]': variant === 'primary',
+          'border border-white/20 bg-white/10 text-white hover:bg-white/20 hover:border-white/30': variant === 'outline',
           'bg-red-600 text-white hover:bg-red-700': variant === 'danger',
         },
         className

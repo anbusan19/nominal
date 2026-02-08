@@ -291,7 +291,6 @@ export function EmployerRegistration() {
                   BigInt(0),
                 ],
                 chainId: ensTxData.transaction.chainId,
-                data: ensTxData.transaction.data as `0x${string}`,
               })
               
               // Wait for transaction hash

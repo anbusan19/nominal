@@ -95,8 +95,8 @@ export function EmployeeRegistration({ companyEnsName }: { companyEnsName: strin
 
   if (!isConnected) {
     return (
-      <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-        <p className="text-gray-500 dark:text-gray-400">
+      <div className="p-4 border border-white/10 bg-[#0A0A0A] rounded-lg">
+        <p className="text-gray-400">
           Please connect your wallet to register
         </p>
       </div>
@@ -105,13 +105,13 @@ export function EmployeeRegistration({ companyEnsName }: { companyEnsName: strin
 
   if (success) {
     return (
-      <div className="p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-        <h3 className="text-lg font-semibold text-green-800 dark:text-green-200 mb-2">
+      <div className="p-6 border border-green-500/30 bg-green-500/10 rounded-lg">
+        <h3 className="text-lg font-semibold text-green-400 mb-2">
           ✅ Registration Successful!
         </h3>
-        <p className="text-gray-700 dark:text-gray-300 mb-2">{success}</p>
+        <p className="text-gray-300 mb-2">{success}</p>
         {subEnsName && (
-          <p className="text-sm font-mono text-green-600 dark:text-green-400 mb-4">
+          <p className="text-sm font-mono text-brand-orange mb-4">
             {subEnsName}
           </p>
         )}
@@ -131,15 +131,15 @@ export function EmployeeRegistration({ companyEnsName }: { companyEnsName: strin
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold mb-2">Employee Registration</h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">
-          Register for a sub-ENS domain under <span className="font-mono">{companyEnsName}</span>
+        <h2 className="text-2xl font-bold font-manrope mb-2 text-white">Employee Registration</h2>
+        <p className="text-gray-400 mb-4">
+          Register for a sub-ENS domain under <span className="font-mono text-brand-orange">{companyEnsName}</span>
         </p>
       </div>
 
       <form onSubmit={handleRegister} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium mb-2 text-gray-300">
             Username / Label *
           </label>
           <div className="flex gap-2">
@@ -152,23 +152,23 @@ export function EmployeeRegistration({ companyEnsName }: { companyEnsName: strin
                 setError(null)
               }}
               placeholder="alice"
-              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="flex-1 px-4 py-2 border border-white/10 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange/50 bg-[#0A0A0A] text-white placeholder-gray-500"
               disabled={loading || isSending || isConfirming}
               required
             />
-            <span className="self-center text-gray-500 dark:text-gray-400">
+            <span className="self-center text-gray-400">
               .{companyEnsName}
             </span>
           </div>
           {label && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Your sub-ENS will be: <span className="font-mono">{label}.{companyEnsName}</span>
+            <p className="text-xs text-gray-400 mt-1">
+              Your sub-ENS will be: <span className="font-mono text-brand-orange">{label}.{companyEnsName}</span>
             </p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium mb-2 text-gray-300">
             Name (Optional)
           </label>
           <input
@@ -176,13 +176,13 @@ export function EmployeeRegistration({ companyEnsName }: { companyEnsName: strin
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Alice Smith"
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-4 py-2 border border-white/10 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange/50 bg-[#0A0A0A] text-white placeholder-gray-500"
             disabled={loading || isSending || isConfirming}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium mb-2 text-gray-300">
             Email (Optional)
           </label>
           <input
@@ -190,7 +190,7 @@ export function EmployeeRegistration({ companyEnsName }: { companyEnsName: strin
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="alice@example.com"
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-4 py-2 border border-white/10 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange/50 bg-[#0A0A0A] text-white placeholder-gray-500"
             disabled={loading || isSending || isConfirming}
           />
         </div>
@@ -216,8 +216,8 @@ export function EmployeeRegistration({ companyEnsName }: { companyEnsName: strin
       </form>
 
       {error && (
-        <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+        <div className="p-3 border border-red-500/30 bg-red-500/10 rounded-lg">
+          <p className="text-sm text-red-400">{error}</p>
         </div>
       )}
     </div>

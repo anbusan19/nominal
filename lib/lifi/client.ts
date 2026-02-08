@@ -18,7 +18,14 @@ export async function getRoutes(params: {
   fromAddress: string;
 }) {
   try {
-    const routes = await lifi.getRoutes(params);
+    const routes = await lifi.getRoutes({
+      fromChainId: params.fromChain,
+      toChainId: params.toChain,
+      fromTokenAddress: params.fromToken,
+      toTokenAddress: params.toToken,
+      fromAmount: params.fromAmount,
+      fromAddress: params.fromAddress,
+    });
     return routes;
   } catch (error) {
     console.error('Error getting LI.FI routes:', error);

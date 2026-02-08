@@ -11,7 +11,7 @@ import {
   ENS_CHAIN_ID 
 } from '@/lib/config/constants'
 import { ENS_ETH_REGISTRAR_CONTROLLER_ABI, ENS_NAME_WRAPPER_ABI } from '@/lib/contracts/abis'
-import { namehash, encodeLabelhash, randomBytes, keccak256, toHex, createPublicClient, http } from 'viem'
+import { namehash, keccak256, toHex, createPublicClient, http } from 'viem'
 import { normalizeENSName } from '@/lib/ens/utils'
 
 type Step = 'commit' | 'wait' | 'register' | 'wrap' | 'complete'
@@ -213,8 +213,16 @@ export function CompanyRegistration() {
 
       setError(null)
 
-      // Generate random secret (32 bytes)
-      const secret = randomBytes(32) as `0x${string}`
+      // Generate random secret (32 bytes) - browser compatible
+      const randomArray = new Uint8Array(32)
+      if (typeof window !== 'undefined' && window.crypto) {
+        window.crypto.getRandomValues(randomArray)
+      } else {
+        // Fallback for Node.js (shouldn't happen in client component, but just in case)
+        const crypto = require('crypto')
+        crypto.randomFillSync(randomArray)
+      }
+      const secret = toHex(randomArray) as `0x${string}`
       
       // Generate commitment using makeCommitment function from the contract
       const publicClient = createPublicClient({
@@ -354,8 +362,8 @@ export function CompanyRegistration() {
 
   if (!isConnected) {
     return (
-      <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-        <p className="text-gray-500 dark:text-gray-400">
+      <div className="p-4 border border-white/10 bg-[#0A0A0A] rounded-lg">
+        <p className="text-gray-400">
           Please connect your wallet to register a domain
         </p>
       </div>
@@ -364,16 +372,16 @@ export function CompanyRegistration() {
 
   if (step === 'complete') {
     return (
-      <div className="p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-        <h3 className="text-lg font-semibold text-green-800 dark:text-green-200 mb-2">
+      <div className="p-6 border border-green-500/30 bg-green-500/10 rounded-lg">
+        <h3 className="text-lg font-semibold text-green-400 mb-2">
           ✅ Registration Complete!
         </h3>
-        <p className="text-gray-700 dark:text-gray-300 mb-4">
-          Your domain <span className="font-mono font-semibold">{registeredDomain}</span> has been registered and wrapped.
+        <p className="text-gray-300 mb-4">
+          Your domain <span className="font-mono font-semibold text-brand-orange">{registeredDomain}</span> has been registered and wrapped.
           You can now issue subnames to employees.
         </p>
         {wrapHash && (
-          <p className="text-xs text-green-600 dark:text-green-400 font-mono break-all">
+          <p className="text-xs text-green-400 font-mono break-all">
             Wrap TX: {wrapHash}
           </p>
         )}
@@ -394,25 +402,35 @@ export function CompanyRegistration() {
     )
   }
 
+  // Helper function to get progress bar color
+  const getProgressColor = (currentStep: Step, targetStep: Step, laterSteps: Step[]) => {
+    if (currentStep === targetStep) return 'bg-brand-orange'
+    const stepOrder: Step[] = ['commit', 'wait', 'register', 'wrap', 'complete']
+    const currentIndex = stepOrder.indexOf(currentStep)
+    const targetIndex = stepOrder.indexOf(targetStep)
+    if (currentIndex > targetIndex || laterSteps.includes(currentStep)) return 'bg-green-500'
+    return 'bg-white/10'
+  }
+
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold mb-4">Register Company Domain</h2>
+        <h2 className="text-2xl font-bold font-manrope mb-4 text-white">Register Company Domain</h2>
         <div className="flex items-center gap-2 mb-4">
           <div className={`flex-1 h-2 rounded-full ${
-            step === 'commit' ? 'bg-blue-500' : 'bg-green-500'
+            step === 'commit' ? 'bg-brand-orange' : 'bg-green-500'
           }`} />
           <div className={`flex-1 h-2 rounded-full ${
-            step === 'wait' ? 'bg-blue-500' : step === 'register' || step === 'wrap' || step === 'complete' ? 'bg-green-500' : 'bg-gray-300'
+            getProgressColor(step, 'wait', ['register', 'wrap', 'complete'])
           }`} />
           <div className={`flex-1 h-2 rounded-full ${
-            step === 'register' ? 'bg-blue-500' : step === 'wrap' || step === 'complete' ? 'bg-green-500' : 'bg-gray-300'
+            getProgressColor(step, 'register', ['wrap', 'complete'])
           }`} />
           <div className={`flex-1 h-2 rounded-full ${
-            step === 'wrap' ? 'bg-blue-500' : step === 'complete' ? 'bg-green-500' : 'bg-gray-300'
+            getProgressColor(step, 'wrap', ['complete'])
           }`} />
         </div>
-        <div className="flex justify-between text-xs text-gray-500 mb-2">
+        <div className="flex justify-between text-xs text-gray-400 mb-2">
           <span>Commit</span>
           <span>Wait</span>
           <span>Register</span>
@@ -423,7 +441,7 @@ export function CompanyRegistration() {
       {step === 'commit' && (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium mb-2 text-gray-300">
               Domain Name
             </label>
             <div className="flex gap-2">
@@ -436,16 +454,16 @@ export function CompanyRegistration() {
                   setError(null)
                 }}
                 placeholder="company"
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="flex-1 px-4 py-2 border border-white/10 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange/50 bg-[#0A0A0A] text-white placeholder-gray-500"
                 disabled={isCommitting || isCommitConfirming}
               />
-              <span className="self-center text-gray-500 dark:text-gray-400">
+              <span className="self-center text-gray-400">
                 .eth
               </span>
             </div>
             {domainName && (
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                You will register: <span className="font-mono">{domainName}.eth</span>
+              <p className="text-xs text-gray-400 mt-1">
+                You will register: <span className="font-mono text-brand-orange">{domainName}.eth</span>
               </p>
             )}
           </div>
@@ -473,14 +491,14 @@ export function CompanyRegistration() {
 
       {step === 'wait' && (
         <div className="space-y-4">
-          <div className="p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg text-center">
-            <p className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-2">
+          <div className="p-6 border border-brand-orange/30 bg-brand-orange/10 rounded-lg text-center">
+            <p className="text-lg font-semibold text-brand-orange mb-2">
               Waiting Period
             </p>
-            <p className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+            <p className="text-4xl font-bold text-brand-orange mb-2">
               {countdown}s
             </p>
-            <p className="text-sm text-blue-700 dark:text-blue-300">
+            <p className="text-sm text-gray-300">
               Please wait before proceeding to registration. This prevents front-running.
             </p>
           </div>
@@ -498,14 +516,14 @@ export function CompanyRegistration() {
 
       {step === 'register' && (
         <div className="space-y-4">
-          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
-              Registering: <span className="font-mono font-semibold">{registrationData?.name}.eth</span>
+          <div className="p-4 border border-white/10 bg-[#0A0A0A] rounded-lg">
+            <p className="text-sm text-gray-300 mb-2">
+              Registering: <span className="font-mono font-semibold text-brand-orange">{registrationData?.name}.eth</span>
             </p>
             {isLoadingPrice ? (
-              <p className="text-xs text-gray-500">Loading price...</p>
+              <p className="text-xs text-gray-400">Loading price...</p>
             ) : rentPrice ? (
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-400">
                 Price: {(Number(rentPrice) / 1e18).toFixed(4)} ETH
                 <br />
                 With 10% slippage: {(Number(rentPrice) * 1.1 / 1e18).toFixed(4)} ETH
@@ -536,11 +554,11 @@ export function CompanyRegistration() {
 
       {step === 'wrap' && (
         <div className="space-y-4">
-          <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-            <p className="text-sm text-yellow-800 dark:text-yellow-200 mb-2">
+          <div className="p-4 border border-yellow-500/30 bg-yellow-500/10 rounded-lg">
+            <p className="text-sm text-yellow-400 mb-2">
               ⚠️ Important: Wrapping Required
             </p>
-            <p className="text-xs text-yellow-700 dark:text-yellow-300">
+            <p className="text-xs text-gray-300">
               Your domain must be wrapped to support subnames. This is the final step.
             </p>
           </div>
@@ -567,22 +585,22 @@ export function CompanyRegistration() {
       )}
 
       {error && (
-        <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+        <div className="p-3 border border-red-500/30 bg-red-500/10 rounded-lg">
+          <p className="text-sm text-red-400">{error}</p>
         </div>
       )}
 
       {commitHash && (
-        <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-          <p className="text-xs text-gray-600 dark:text-gray-400 font-mono break-all">
+        <div className="p-3 border border-white/10 bg-[#0A0A0A] rounded-lg">
+          <p className="text-xs text-gray-400 font-mono break-all">
             Commit TX: {commitHash}
           </p>
         </div>
       )}
 
       {registerHash && (
-        <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-          <p className="text-xs text-gray-600 dark:text-gray-400 font-mono break-all">
+        <div className="p-3 border border-white/10 bg-[#0A0A0A] rounded-lg">
+          <p className="text-xs text-gray-400 font-mono break-all">
             Register TX: {registerHash}
           </p>
         </div>

@@ -108,7 +108,7 @@ const Architecture = () => {
                   <div className="relative flex items-center justify-center">
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                      transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
                       className="absolute inset-0 -m-4 rounded-full"
                     />
                     <div className="w-14 h-14 rounded-full bg-gradient-to-br from-brand-orange to-brand-orange/80 flex items-center justify-center text-white shadow-lg relative z-10">

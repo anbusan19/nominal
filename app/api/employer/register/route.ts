@@ -10,6 +10,7 @@ interface CompanyRegistration {
   ensDomain: string
   walletAddress: string
   registeredAt: string
+  updatedAt?: string
   isOwner: boolean
   ownerChain?: string
 }

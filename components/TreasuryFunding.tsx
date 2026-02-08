@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from 'wagmi'
 import { Button } from '@/components/ui/Button'
 import { arc } from '@/lib/config/chains'
-import { ARC_USDC_ADDRESS, PAYROLL_VAULT_ADDRESS } from '@/lib/config/constants'
+import { ARC_USDC_ADDRESS } from '@/lib/config/chains'
+import { PAYROLL_VAULT_ADDRESS } from '@/lib/config/constants'
 import { PAYROLL_VAULT_ABI, ERC20_ABI } from '@/lib/contracts/abis'
 import { parseUnits, formatUnits } from 'viem'
 
@@ -174,8 +175,8 @@ export function TreasuryFunding({ companyEnsName, onFunded }: TreasuryFundingPro
 
   if (!isConnected) {
     return (
-      <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-        <p className="text-gray-500 dark:text-gray-400">
+      <div className="p-4 border border-white/10 bg-[#0A0A0A] rounded-lg">
+        <p className="text-gray-400">
           Please connect your wallet to fund the treasury
         </p>
       </div>
@@ -184,8 +185,8 @@ export function TreasuryFunding({ companyEnsName, onFunded }: TreasuryFundingPro
 
   if (chainId !== arc.id) {
     return (
-      <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-        <p className="text-yellow-800 dark:text-yellow-200">
+      <div className="p-4 border border-yellow-500/30 bg-yellow-500/10 rounded-lg">
+        <p className="text-yellow-400">
           Please switch to Arc network to fund the treasury
         </p>
       </div>
@@ -199,22 +200,22 @@ export function TreasuryFunding({ companyEnsName, onFunded }: TreasuryFundingPro
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-lg font-semibold mb-2">Fund Treasury</h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+        <h3 className="text-lg font-semibold font-manrope mb-2 text-white">Fund Treasury</h3>
+        <p className="text-sm text-gray-400 mb-4">
           Deposit USDC into the payroll vault on Arc network
         </p>
       </div>
 
       {balance && (
-        <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Your USDC Balance: <span className="font-mono font-semibold">{formatUnits(balance, 6)} USDC</span>
+        <div className="p-3 border border-white/10 bg-[#0A0A0A] rounded-lg">
+          <p className="text-sm text-gray-400">
+            Your USDC Balance: <span className="font-mono font-semibold text-brand-orange">{formatUnits(balance, 6)} USDC</span>
           </p>
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+        <label className="block text-sm font-medium mb-2 text-gray-300">
           Amount (USDC)
         </label>
         <input
@@ -227,7 +228,7 @@ export function TreasuryFunding({ companyEnsName, onFunded }: TreasuryFundingPro
           placeholder="1000"
           step="0.000001"
           min="0"
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="w-full px-4 py-2 border border-white/10 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange/50 bg-[#0A0A0A] text-white placeholder-gray-500"
           disabled={loading || isApproving || isApproveConfirming || isDepositing || isDepositConfirming}
         />
       </div>
@@ -275,22 +276,22 @@ export function TreasuryFunding({ companyEnsName, onFunded }: TreasuryFundingPro
       )}
 
       {error && (
-        <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+        <div className="p-3 border border-red-500/30 bg-red-500/10 rounded-lg">
+          <p className="text-sm text-red-400">{error}</p>
         </div>
       )}
 
       {approveHash && (
-        <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-          <p className="text-xs text-gray-600 dark:text-gray-400 font-mono break-all">
+        <div className="p-3 border border-white/10 bg-[#0A0A0A] rounded-lg">
+          <p className="text-xs text-gray-400 font-mono break-all">
             Approve TX: {approveHash}
           </p>
         </div>
       )}
 
       {depositHash && (
-        <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-          <p className="text-xs text-gray-600 dark:text-gray-400 font-mono break-all">
+        <div className="p-3 border border-white/10 bg-[#0A0A0A] rounded-lg">
+          <p className="text-xs text-gray-400 font-mono break-all">
             Deposit TX: {depositHash}
           </p>
         </div>

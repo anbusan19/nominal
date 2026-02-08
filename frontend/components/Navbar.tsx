@@ -21,7 +21,7 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-right justify-end gap-3">
           <a 
-            href="https://github.com/your-username/nominal" 
+            href="https://github.com/anbusan19/nominal" 
             target="_blank" 
             rel="noopener noreferrer"
             className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded font-semibold text-sm transition-all border border-white/20 hover:border-white/30"
@@ -39,7 +39,7 @@ const Navbar = () => {
             <span>Docs</span>
           </a>
           <a 
-            href="https://nominal-taco.vercel.app" 
+            href="https://nominal-core.vercel.app" 
             target="_blank" 
             rel="noopener noreferrer"
             className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded font-semibold text-sm transition-all border border-white/20 hover:border-white/30"

@@ -5,7 +5,7 @@ import { useAccount, useWriteContract, useReadContract } from 'wagmi'
 import { Button } from './ui/Button'
 import { prepareBatchDistribute, prepareDeposit } from '@/lib/contracts/payroll'
 import { PAYROLL_VAULT_ABI } from '@/lib/contracts/abis'
-import { USDC_ADDRESS } from '@/lib/config/chains'
+import { ARC_USDC_ADDRESS } from '@/lib/config/chains'
 
 export function PayrollManagement() {
   const { address, isConnected } = useAccount()
@@ -62,20 +62,20 @@ export function PayrollManagement() {
   }
 
   if (!isConnected) {
-    return <p className="text-gray-500">Please connect your wallet to continue</p>
+    return <p className="text-gray-400">Please connect your wallet to continue</p>
   }
 
   return (
     <div className="space-y-4">
-      <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-        <p className="text-sm text-gray-600 dark:text-gray-400">Vault Balance</p>
-        <p className="text-2xl font-bold">
+      <div className="p-4 border border-white/10 bg-[#0A0A0A] rounded-lg">
+        <p className="text-sm text-gray-400">Vault Balance</p>
+        <p className="text-2xl font-bold text-white">
           {balance ? `${Number(balance) / 10**6} USDC` : 'Loading...'}
         </p>
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-2">
+        <label className="block text-sm font-medium mb-2 text-gray-300">
           Deposit Amount (USDC)
         </label>
         <input
@@ -83,7 +83,7 @@ export function PayrollManagement() {
           value={depositAmount}
           onChange={(e) => setDepositAmount(e.target.value)}
           placeholder="1000"
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
+          className="w-full px-4 py-2 border border-white/10 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange/50 bg-[#0A0A0A] text-white placeholder-gray-500"
         />
       </div>
       <Button
@@ -93,7 +93,7 @@ export function PayrollManagement() {
         {isDepositing ? 'Depositing...' : 'Deposit USDC'}
       </Button>
 
-      <div className="pt-4 border-t">
+      <div className="pt-4 border-t border-white/10">
         <Button
           onClick={handleBatchDistribute}
           variant="outline"

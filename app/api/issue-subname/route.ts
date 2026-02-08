@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createWalletClient, createPublicClient, http, Address, namehash, parseAccount } from 'viem'
+import { createWalletClient, createPublicClient, http, Address, namehash } from 'viem'
 import { sepolia } from 'viem/chains'
 import { privateKeyToAccount } from 'viem/accounts'
 import { ENS_NAME_WRAPPER_ADDRESS, ENS_PUBLIC_RESOLVER, ENS_CHAIN_ID } from '@/lib/config/constants'

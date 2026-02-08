@@ -42,8 +42,14 @@ export async function POST(request: NextRequest) {
           walletId: treasuryWalletId,
           tokenId: usdcTokenId,
           destinationAddress: payout.employeeAddress,
-          amounts: [payout.amount],
-          feeLevel: 'MEDIUM' as const,
+          amount: [payout.amount],
+          fee: {
+            type: 'level',
+            config: {
+              feeLevel: 'MEDIUM',
+            },
+          },
+          
         })
       )
     );

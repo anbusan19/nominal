@@ -54,13 +54,13 @@ export function EmployeeWithdrawal() {
   }
 
   if (!isConnected) {
-    return <p className="text-gray-500">Please connect your wallet to continue</p>
+    return <p className="text-gray-400">Please connect your wallet to continue</p>
   }
 
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium mb-2">
+        <label className="block text-sm font-medium mb-2 text-gray-300">
           Amount to Bridge (USDC)
         </label>
         <input
@@ -68,17 +68,17 @@ export function EmployeeWithdrawal() {
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder="100"
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
+          className="w-full px-4 py-2 border border-white/10 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange/50 bg-[#0A0A0A] text-white placeholder-gray-500"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium mb-2">
+        <label className="block text-sm font-medium mb-2 text-gray-300">
           Destination Chain
         </label>
         <select
           value={destinationChain}
           onChange={(e) => setDestinationChain(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
+          className="w-full px-4 py-2 border border-white/10 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange/50 bg-[#0A0A0A] text-white"
         >
           <option value="base">Base</option>
           <option value="arbitrum">Arbitrum</option>
@@ -92,7 +92,7 @@ export function EmployeeWithdrawal() {
       >
         {isLoading ? 'Finding Route...' : 'Claim & Bridge'}
       </Button>
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-gray-400">
         This will bridge your USDC from Arc to {destinationChain} using LI.FI
       </p>
     </div>

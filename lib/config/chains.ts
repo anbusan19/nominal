@@ -3,7 +3,7 @@ import { sepolia } from 'viem/chains';
 
 // Arc (Circle) Testnet Chain Configuration
 export const arc = defineChain({
-  id: Number(process.env.NEXT_PUBLIC_ARC_CHAIN_ID) || 5042002,
+  id: Number(process.env.NEXT_PUBLIC_ARC_CHAIN_ID || '5042002'),
   name: 'Arc Testnet',
   nativeCurrency: {
     decimals: 6, // USDC has 6 decimals on Arc

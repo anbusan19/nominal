@@ -37,13 +37,13 @@ export function EmployeeProvisioning() {
   }
 
   if (!isConnected) {
-    return <p className="text-gray-500">Please connect your wallet to continue</p>
+    return <p className="text-gray-400">Please connect your wallet to continue</p>
   }
 
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium mb-2">
+        <label className="block text-sm font-medium mb-2 text-gray-300">
           Parent Domain (e.g., company.eth)
         </label>
         <input
@@ -51,11 +51,11 @@ export function EmployeeProvisioning() {
           value={parentDomain}
           onChange={(e) => setParentDomain(e.target.value)}
           placeholder="company.eth"
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
+          className="w-full px-4 py-2 border border-white/10 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange/50 bg-[#0A0A0A] text-white placeholder-gray-500"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium mb-2">
+        <label className="block text-sm font-medium mb-2 text-gray-300">
           Subname Label (e.g., alice)
         </label>
         <input
@@ -63,11 +63,11 @@ export function EmployeeProvisioning() {
           value={subname}
           onChange={(e) => setSubname(e.target.value)}
           placeholder="alice"
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
+          className="w-full px-4 py-2 border border-white/10 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange/50 bg-[#0A0A0A] text-white placeholder-gray-500"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium mb-2">
+        <label className="block text-sm font-medium mb-2 text-gray-300">
           Employee Address
         </label>
         <input
@@ -75,7 +75,7 @@ export function EmployeeProvisioning() {
           value={employeeAddress}
           onChange={(e) => setEmployeeAddress(e.target.value)}
           placeholder="0x..."
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 font-mono"
+          className="w-full px-4 py-2 border border-white/10 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange/50 bg-[#0A0A0A] text-white placeholder-gray-500 font-mono"
         />
       </div>
       <Button
@@ -85,8 +85,8 @@ export function EmployeeProvisioning() {
         {isPending ? 'Processing...' : 'Create Subname & Add Employee'}
       </Button>
       {parentDomain && subname && (
-        <p className="text-sm text-gray-600">
-          Will create: <span className="font-mono">{subname}.{parentDomain}</span>
+        <p className="text-sm text-gray-400">
+          Will create: <span className="font-mono text-brand-orange">{subname}.{parentDomain}</span>
         </p>
       )}
     </div>

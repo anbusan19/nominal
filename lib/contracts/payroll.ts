@@ -1,6 +1,6 @@
 import { Address, encodeFunctionData } from 'viem';
 import { PAYROLL_VAULT_ABI, ERC20_ABI } from './abis';
-import { USDC_ADDRESS } from '../config/chains';
+import { ARC_USDC_ADDRESS } from '../config/chains';
 
 /**
  * Prepare deposit transaction data for PayrollVault
@@ -8,12 +8,12 @@ import { USDC_ADDRESS } from '../config/chains';
 export function prepareDeposit(amount: bigint) {
   return {
     abi: ERC20_ABI,
-    address: USDC_ADDRESS,
+    address: ARC_USDC_ADDRESS,
     functionName: 'approve' as const,
     args: [
       process.env.NEXT_PUBLIC_PAYROLL_VAULT_ADDRESS as Address,
       amount,
-    ],
+    ] as const,
   };
 }
 
@@ -32,7 +32,7 @@ export function prepareBatchDistribute(
     abi: PAYROLL_VAULT_ABI,
     address: process.env.NEXT_PUBLIC_PAYROLL_VAULT_ADDRESS as Address,
     functionName: 'batchDistribute' as const,
-    args: [recipients, amounts],
+    args: [recipients, amounts] as const,
   };
 }
 
@@ -44,6 +44,6 @@ export function prepareAddEmployee(employeeAddress: Address, ensSubname: string)
     abi: PAYROLL_VAULT_ABI,
     address: process.env.NEXT_PUBLIC_PAYROLL_VAULT_ADDRESS as Address,
     functionName: 'addEmployee' as const,
-    args: [employeeAddress, ensSubname],
+    args: [employeeAddress, ensSubname] as const,
   };
 }

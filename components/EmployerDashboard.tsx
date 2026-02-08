@@ -135,8 +135,8 @@ export function EmployerDashboard({ companyEnsName }: { companyEnsName: string }
 
   if (!isConnected) {
     return (
-      <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-        <p className="text-gray-500 dark:text-gray-400">
+      <div className="p-4 border border-white/10 bg-[#0A0A0A] rounded-lg">
+        <p className="text-gray-400">
           Please connect your wallet to view the dashboard
         </p>
       </div>
@@ -146,15 +146,15 @@ export function EmployerDashboard({ companyEnsName }: { companyEnsName: string }
   if (loading) {
     return (
       <div className="p-4 text-center">
-        <p className="text-gray-500">Loading company data...</p>
+        <p className="text-gray-400">Loading company data...</p>
       </div>
     )
   }
 
   if (error && !company) {
     return (
-      <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-        <p className="text-red-800 dark:text-red-200">{error}</p>
+      <div className="p-4 border border-red-500/30 bg-red-500/10 rounded-lg">
+        <p className="text-red-400">{error}</p>
       </div>
     )
   }
@@ -163,8 +163,8 @@ export function EmployerDashboard({ companyEnsName }: { companyEnsName: string }
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold">Company Dashboard</h2>
-          <p className="text-gray-600 dark:text-gray-400 font-mono">{company?.ensName}</p>
+          <h2 className="text-2xl font-bold font-manrope text-white">Company Dashboard</h2>
+          <p className="text-gray-400 font-mono">{company?.ensName}</p>
         </div>
         {company?.treasuryAddress && (
           <Button onClick={handleExecutePayroll} variant="primary">
@@ -174,47 +174,47 @@ export function EmployerDashboard({ companyEnsName }: { companyEnsName: string }
       </div>
 
       {company?.treasuryAddress && (
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
+        <div className="p-4 border border-brand-orange/30 bg-brand-orange/10 rounded-lg">
+          <p className="text-sm font-medium text-brand-orange">
             Treasury Address
           </p>
-          <p className="text-xs font-mono text-blue-600 dark:text-blue-400 break-all">
+          <p className="text-xs font-mono text-gray-300 break-all">
             {company.treasuryAddress}
           </p>
         </div>
       )}
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Employees ({employees.length})</h3>
+        <h3 className="text-lg font-semibold font-manrope mb-4 text-white">Employees ({employees.length})</h3>
         {employees.length === 0 ? (
-          <p className="text-gray-500 dark:text-gray-400">No employees registered yet</p>
+          <p className="text-gray-400">No employees registered yet</p>
         ) : (
           <div className="space-y-4">
             {employees.map((employee) => (
               <div
                 key={employee.id}
-                className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
+                className="p-4 border border-white/10 bg-[#0A0A0A] rounded-lg hover:border-brand-orange/30 transition-colors"
               >
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <p className="font-semibold">{employee.name || 'Unnamed Employee'}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 font-mono">
+                    <p className="font-semibold text-white">{employee.name || 'Unnamed Employee'}</p>
+                    <p className="text-sm text-gray-400 font-mono">
                       {employee.subEnsName}
                     </p>
                     {resolvedAddresses[employee.subEnsName] && (
-                      <p className="text-xs text-gray-500 dark:text-gray-500 font-mono mt-1">
+                      <p className="text-xs text-gray-500 font-mono mt-1">
                         Resolved: {resolvedAddresses[employee.subEnsName]}
                       </p>
                     )}
                     {resolvingAddresses.has(employee.subEnsName) && (
-                      <p className="text-xs text-gray-500 mt-1">Resolving...</p>
+                      <p className="text-xs text-gray-400 mt-1">Resolving...</p>
                     )}
                     {employee.email && (
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      <p className="text-sm text-gray-400 mt-1">
                         {employee.email}
                       </p>
                     )}
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                    <p className="text-xs text-gray-500 mt-1">
                       Wallet: {employee.walletAddress.slice(0, 6)}...{employee.walletAddress.slice(-4)}
                     </p>
                   </div>
@@ -226,8 +226,8 @@ export function EmployerDashboard({ companyEnsName }: { companyEnsName: string }
       </div>
 
       {error && (
-        <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+        <div className="p-3 border border-red-500/30 bg-red-500/10 rounded-lg">
+          <p className="text-sm text-red-400">{error}</p>
         </div>
       )}
     </div>

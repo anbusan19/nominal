@@ -6,10 +6,11 @@ import { connectWallet } from '../lib/placeholderFunctions';
 
 // 1. Define the PixelPlanet component first
 const PixelPlanet = ({ color = "#a83a18" }) => {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let animationFrameId;
     let time = 0;
@@ -193,77 +194,6 @@ const Hero = () => {
             </div>
             </div>
           </motion.div>
-          
-          {/* New Terminal Component */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-            className="relative group w-full max-w-2xl"
-          >
-            {/* Glow effect */}
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-brand-orange to-orange-600 rounded-xl blur opacity-30 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-            
-            {/* Terminal Window */}
-            <div className="relative bg-[#0A0A0A] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
-              {/* Terminal Header */}
-              <div className="bg-[#111] px-4 py-2 flex items-center justify-between border-b border-white/5">
-                <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
-                </div>
-                <div className="flex items-center gap-2 text-gray-500 text-xs font-mono uppercase tracking-wider">
-                  <Terminal size={12} />
-                  <span>TERMINAL</span>
-                </div>
-                <div className="w-16"></div>
-              </div>
-
-              {/* Terminal Content */}
-              <div className="p-6">
-                {!isConnected ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2 font-mono text-sm">
-                      <span className="text-brand-orange select-none">$</span>
-                      <span className="text-gray-100">{connectText}</span>
-                      <button
-                        onClick={handleCopy}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-white/10 rounded ml-2"
-                      >
-                        {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} className="text-gray-400" />}
-                      </button>
-                    </div>
-                    <button
-                      onClick={handleConnectWallet}
-                      disabled={isConnecting}
-                      className="w-full flex items-center justify-center gap-3 bg-brand-orange hover:bg-red-600 text-white px-6 py-4 rounded-lg font-semibold text-sm transition-all shadow-[0_0_20px_rgba(232,65,66,0.3)] hover:shadow-[0_0_30px_rgba(232,65,66,0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <Wallet size={18} />
-                      {isConnecting ? 'Connecting...' : 'Connect Wallet'}
-                    </button>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2 font-mono text-sm">
-                      <span className="text-brand-orange select-none">$</span>
-                      <span className="text-gray-100">Wallet Connected</span>
-                    </div>
-                    <div className="bg-white/5 border border-white/10 rounded-lg p-4 font-mono text-xs">
-                      <div className="text-gray-400 mb-2">Address:</div>
-                      <div className="text-brand-orange break-all">{walletAddress}</div>
-                    </div>
-                    <div className="flex items-center gap-2 text-green-500 text-sm font-mono">
-                      <Check size={14} />
-                      <span>Ready to use Nominal</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </motion.div>
-
         </motion.div>
       </div>
 

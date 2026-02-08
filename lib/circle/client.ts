@@ -23,7 +23,7 @@ export function getCircleClient() {
  */
 export async function getTreasuryBalance(walletId: string) {
   const client = getCircleClient();
-  return client.getWalletTokenBalance({ walletId });
+  return client.getWalletTokenBalance({ id: walletId });
 }
 
 /**
@@ -41,7 +41,12 @@ export async function createPayout(params: {
     walletId: params.walletId,
     tokenId: params.tokenId,
     destinationAddress: params.destinationAddress,
-    amounts: [params.amount],
-    feeLevel: params.feeLevel || 'MEDIUM',
+    amount: [params.amount],
+          fee: {
+            type: 'level',
+            config: {
+              feeLevel: 'MEDIUM',
+            },
+          },
   });
 }
