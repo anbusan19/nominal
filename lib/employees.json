@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Alice Chen",
+    "ensSubname": "alice.nominal.eth",
+    "walletAddress": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+    "salary": 5000
+  },
+  {
+    "name": "Bob Martinez",
+    "ensSubname": "bob.nominal.eth",
+    "walletAddress": "0x8ba1f109551bD432803012645Hac136c22C4C8C",
+    "salary": 4500
+  },
+  {
+    "name": "Carol Johnson",
+    "ensSubname": "carol.nominal.eth",
+    "walletAddress": "0x1234567890123456789012345678901234567890",
+    "salary": 5500
+  },
+  {
+    "name": "David Kim",
+    "ensSubname": "david.nominal.eth",
+    "walletAddress": "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd",
+    "salary": 4800
+  },
+  {
+    "name": "Eva Rodriguez",
+    "ensSubname": "eva.nominal.eth",
+    "walletAddress": "0xfedcbafedcbafedcbafedcbafedcbafedcbafedc",
+    "salary": 5200
+  }
+]
