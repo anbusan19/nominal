@@ -1,0 +1,43 @@
+{
+  "name": "nominal",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "test": "forge test",
+    "test:contracts": "forge test"
+  },
+  "dependencies": {
+    "@circle-fin/developer-controlled-wallets": "^10.1.0",
+    "@circle-fin/w3s-pw-web-sdk": "^1.1.11",
+    "@ensdomains/ensjs": "^3.0.0",
+    "@lifi/sdk": "^2.0.0",
+    "@lifi/widget": "^3.40.6",
+    "@tanstack/react-query": "^5.90.20",
+    "@wagmi/connectors": "^2.0.0",
+    "clsx": "^2.0.0",
+    "dotenv": "^17.2.4",
+    "ethers": "^6.9.0",
+    "next": "^14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.2.0",
+    "viem": "^2.45.1",
+    "wagmi": "^2.19.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.0.4",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3"
+  }
+}
